@@ -120,7 +120,7 @@ app.get('/', function (req, res) {
         dates += ("<h1>" + today.toLocaleDateString("fr-FR", options) + "</h1><hr/>" + '<div class="date-container">' + e + '</div>');
     }
 
-    footer = "<footer> <a href=''>Github</a> <a href='public/legal.html'>Mentions Légales</a> </footer>"
+    footer = "<footer> <a href='https://github.com/LeMocha/michels-calendar'>Github</a> <a href='public/legal.html'>Mentions Légales</a> </footer>"
 
     // Le replace c'est pour dégager des virgules qui apparaissent de manière indésirée sur des jours avec plusieurs évènements. 
     res.send(head + content + dates.replaceAll(",","")+ footer + '</html>');

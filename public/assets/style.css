@@ -1,0 +1,84 @@
+html {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: rgba(242, 237, 237, 0.922);
+}
+body {
+    margin: 0;
+    padding: 0;
+}
+h1 {
+    font-size: 1.6em;
+    margin: 0 0 0 8px;
+}
+h1:first-letter{
+    text-transform: capitalize
+}
+.estiam {
+    border-color: transparent transparent transparent #a700b3;
+}
+.pro {
+    border-color: transparent transparent transparent #e3dc00;
+}
+.perso {
+    border-color: transparent transparent transparent #008ed5;
+}
+.nothing {
+    border-color: transparent transparent transparent #47d250;
+    width: 25%;
+    text-align: center;
+    margin: 0;
+}
+.estiam, .perso, .pro, .nothing {
+    flex: 1 1 0;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 4px 4px 4px gray;
+    border-width: 0 0 0 5px;
+    padding: 15px;
+    margin-bottom:25px;
+    border-style: solid;
+}
+.date-container {
+    display: flex;
+    column-gap: 20px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 0 25px 0 25px;
+}
+hr {
+    margin : 0 8px 15px 8px;
+}
+
+@media (max-width : 800px) {
+    .date-container {
+        flex-direction: column !important;
+        margin:0px
+    }
+    .estiam, .perso, .pro, .nothing {
+        flex: 1 1 0;
+        width: 50% !important;
+        margin: 0 0 25px 0 !important;
+    }
+}
+p {
+    margin-left: 8px;
+    font-size: 1.2em;
+}
+footer {
+    background-color: black;
+    color: white;
+    display: flex;
+    column-gap: 20px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 25px 0 25px 0;
+    margin: 0;
+}
+footer a:visited {
+    color: white;
+}
+footer a {
+    color: white;
+}

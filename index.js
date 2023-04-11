@@ -40,11 +40,16 @@ async function update_events() {
                 start: today.slice(0,-14),
                 end: dans5jours.slice(0,-14),
             },
+            expand: true
         });
 
         for (events of objects) {
-            ical.async.parseICS(events.data, function(err, data) { 
-                obj = Object.entries(data)[1][1];
+            ical.async.parseICS(events.data, function(err, data) {
+                try {
+                    obj = Object.entries(data)[0][1];
+                } catch (e) {
+                    return;
+                }
 
                 // Anonymisation des évènements
                 switch (type) {
@@ -59,13 +64,27 @@ async function update_events() {
                         break;
                 }
 
-                // Stocke l'évènment en objet dans le cache.
-                event_list.events.push({
-                    type: type.toLowerCase(),
-                    title: obj.summary,
-                    start: new Date(obj.start).toISOString(),
-                    end: new Date(obj.end).toISOString(),
-                });
+                if(obj.recurrences) {
+                    // Si l'évènement est récurrent, on le transforme en évènement unique pour chaque date.
+                    for (recurrence of Object.entries(obj.recurrences)) {
+                        recurrence = recurrence[1]
+                        
+                        event_list.events.push({
+                            type: type.toLowerCase(),
+                            title: obj.summary,
+                            start: new Date(recurrence.start).toISOString(),
+                            end: new Date(recurrence.end).toISOString()
+                        });
+                    }
+                } else {
+                    // Stocke l'évènment en objet dans le cache.
+                    event_list.events.push({
+                        type: type.toLowerCase(),
+                        title: obj.summary,
+                        start: new Date(obj.start).toISOString(),
+                        end: new Date(obj.end).toISOString()
+                    });
+                }
             });
         }
         event_list.last_update = new Date(Date.now()).toISOString();

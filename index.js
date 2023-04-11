@@ -95,7 +95,7 @@ app.get('/', function (req, res) {
     t = Date.now() - 86400000;
 
     head = '<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="public/assets/favicon.ico"><title>Calendrier de Manoah</title><link rel="stylesheet" href="public/assets/style.css"></head>';
-    content = '<div class="container"><p>🏠 Calendrier libre, de source ouverte, respecteux de la vie privée et fait maison permettant de connaître mes disponibilités sur les 10 prochains jours.<br>📝 Le contenu du calendrier se met à jour toutes les 15 minutes !<br>⚠️ Attention ! Le calendrier est à usage strictement informel, l\'exactitude du contenu affiché ne peut être promise.</p></div>'
+    content = '<div class="container"><p>🏠 Calendrier libre, de source ouverte, respecteux de la vie privée et fait maison permettant de connaître mes disponibilités sur les 10 prochains jours.<br>📝 Le contenu du calendrier se met à jour toutes les 15 minutes !<br>⚠️ Attention ! Le calendrier est à usage strictement informel, l\'exactitude du contenu affiché ne peut être garantie.</p></div>'
     dates = ""
 
     i = 0;

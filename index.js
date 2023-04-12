@@ -25,6 +25,9 @@ async function update_events() {
         defaultAccountType: 'caldav',
     });
 
+    // Réinitialisation du cache
+    event_list.events = [];
+
     const calendars = await client.fetchCalendars();
 
     // Plage des prochaines dates affichées. (J-1 à J+10)

@@ -25,8 +25,7 @@ async function update_events() {
         defaultAccountType: 'caldav',
     });
 
-    // Réinitialisation du cache
-    event_list.events = [];
+    let temp_event_list = [];
 
     const calendars = await client.fetchCalendars();
 
@@ -72,7 +71,7 @@ async function update_events() {
                     for (recurrence of Object.entries(obj.recurrences)) {
                         recurrence = recurrence[1]
                         
-                        event_list.events.push({
+                        temp_event_list.push({
                             type: type.toLowerCase(),
                             title: obj.summary,
                             start: new Date(recurrence.start).toISOString(),
@@ -81,7 +80,7 @@ async function update_events() {
                     }
                 } else {
                     // Stocke l'évènment en objet dans le cache.
-                    event_list.events.push({
+                    temp_event_list.push({
                         type: type.toLowerCase(),
                         title: obj.summary,
                         start: new Date(obj.start).toISOString(),
@@ -90,14 +89,19 @@ async function update_events() {
                 }
             });
         }
-        event_list.last_update = new Date(Date.now()).toISOString();
-        console.log(new Date(Date.now()).toLocaleString('fr-FR', { hour12: false })+ " ==> Mise à jour du calendrier '"+type+"' effectuée");
     }
 
 
     for (cal of calendars) {
         await fetchEvents(client, cal, cal.displayName);
     }
+
+    // Mise à jour du cache
+    event_list = {last_update: (new Date(Date.now()).toISOString()), events: temp_event_list};
+    console.log(new Date(Date.now()).toLocaleString('fr-FR', { hour12: false })+ " ==> Mise à jour du calendrier effectuée");
+
+    // Actualisation du cache après expiration de 15 minutes.
+    setTimeout(update_events, 900000);
 }
 
 // Mise à jour des évènements au lancement du serveur
@@ -110,16 +114,12 @@ update_events();
 */
 
 app.get('/', function (req, res) {
-    // Actualisation du cache après expiration de 15 minutes.
-    if (new Date(Date.now() - 900000) > new Date(event_list.last_update)) {
-        update_events();
-    }
-    t = Date.now() - 86400000;
 
     head = '<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="public/assets/favicon.ico"><title>Calendrier de Manoah</title><link rel="stylesheet" href="public/assets/style.css"></head>';
     content = '<div class="container"><p>🏠 Calendrier libre, de source ouverte, respecteux de la vie privée et fait maison permettant de connaître mes disponibilités sur les 10 prochains jours.<br>📝 Le contenu du calendrier se met à jour toutes les 15 minutes !<br>⚠️ Attention ! Le calendrier est à usage strictement informel, l\'exactitude du contenu affiché ne peut être garantie.</p></div>'
     dates = ""
 
+    t = Date.now() - 86400000;
     i = 0;
     while (i != 12) {
         var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -144,7 +144,7 @@ app.get('/', function (req, res) {
 
     footer = "<footer> <a href='https://github.com/LeMocha/michels-calendar'>Github</a> <a href='public/legal.html'>Mentions Légales</a> </footer>"
 
-    // Le replace c'est pour dégager des virgules qui apparaissent de manière indésirée sur des jours avec plusieurs évènements. 
+    // Le replaceAll c'est pour dégager des virgules qui apparaissent de manière indésirée sur des jours avec plusieurs évènements. 
     res.send(head + content + dates.replaceAll(",","")+ footer + '</html>');
 })
 
